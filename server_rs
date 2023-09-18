@@ -1,1 +1,46 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract Teleburn {
+    // Event to be emitted after a successful teleburn operation
+    event Teleburned(
+        address indexed sender, 
+        uint256 tokenId, 
+        bytes32 inscriptionId, 
+        string ethereumTeleburnAddress, 
+        uint256 timestamp
+    );
+
+    // Struct for holding inscription data
+    struct Inscription {
+        bytes32 inscriptionId;
+        string ethereumTeleburnAddress;
+        uint256 timestamp;
+    }
+
+    // Mapping from user address to their Inscription data
+    mapping(address => Inscription) public inscriptions;
+
+    // Records an inscription and emits a Teleburned event
+    function recordInscription(
+        uint256 tokenId, 
+        bytes32 inscriptionId, 
+        string memory ethereumTeleburnAddress
+    ) external {
+        Inscription memory newInscription = Inscription({
+            inscriptionId: inscriptionId,
+            ethereumTeleburnAddress: ethereumTeleburnAddress,
+            timestamp: block.timestamp
+        });
+        inscriptions[msg.sender] = newInscription;
+
+        emit Teleburned(msg.sender, tokenId, inscriptionId, ethereumTeleburnAddress, block.timestamp);
+    }
+
+    // Retrieve the inscription details for a specific address
+    function getInscription(address user) external view returns (bytes32, string memory, uint256) {
+        Inscription memory inscription = inscriptions[user];
+        return (inscription.inscriptionId, inscription.ethereumTeleburnAddress, inscription.timestamp);
+    }
+}
 
