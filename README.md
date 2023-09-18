@@ -16,3 +16,15 @@ also included a getInscription function to fetch these details.
 An event Teleburned is emitted whenever an inscription is recorded, which can be used by off-chain services to trigger corresponding actions on Bitcoin.
 The concept of Sat and SatPoint are not clear, so they are just represented as uint256 and bytes32 respectively.
 The previousInscriptionId is captured, linking inscriptions in a kind of chain for each user.
+
+raph/casey notes
+People are interested in burning high-value Ethereum NFTs, so this feature needs to be extremely safe:
+
+ add tests
+ review cryptographic assumptions
+ generate ethereum address with checksum (no ethereum dependencies for this, must be implemented manually)
+ manual end-to-end test (we can just make sure that you can derive genesis inscription ID from the ethereum address)
+ make sure that the index is synced and that the inscription that you're burning is in your wallet
+ add ability to reverse teleburn: get the inscription id from the teleburn address
+ show teleburn address on inscription page
+ only accept ethereum addresses with checksum when deserializing
