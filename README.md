@@ -1,5 +1,12 @@
 # EVMteleburnSmartContract
 Bitcoin Ordinals EVM Teleburn Smart Contract in Solidity 
+The contract uses OpenZeppelin's ERC721 interface for NFT operations
+Solidity has built-in support for the Keccak256 hash function, which is similar to the SHA3 hash function used in the original Rust code.
+Solidity doesn't have native support for ASCII case manipulation, so a helper function toAsciiUpper is used to convert a byte to its ASCII uppercase representation.
+This is a basic example and doesn't cover all aspects of the Rust code you provided, such as tests.
+The teleburn function performs two main operations: it burns the NFT (assuming the NFT contract allows for this and complies with the ERC721 standard) and records the "inscription" details.
+An event Teleburned is emitted when an NFT is successfully teleburned. This event can be monitored by off-chain services to reflect the operation on Bitcoin ordinals.
+The getInscription function allows for querying the inscription details for a specific Ethereum address.
 The teleburn function performs two main operations: it burns the NFT (assuming the NFT contract allows for this and complies with the ERC721 standard) and records the "inscription" details.
 An event Teleburned is emitted when an NFT is successfully teleburned. This event can be monitored by off-chain services to reflect the operation on Bitcoin ordinals.
 The getInscription function allows for querying the inscription details for a specific Ethereum address.
