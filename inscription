@@ -1,0 +1,65 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract Teleburn {
+    // Events
+    event Teleburned(address indexed sender, uint256 tokenId, bytes32 inscriptionId, string teleburnAddress, uint256 timestamp);
+
+    // Struct to capture inscription details
+    struct Inscription {
+        bytes32 inscriptionId;
+        uint256 sat;
+        bytes32 satPoint;
+        string teleburnAddress;
+        uint256 timestamp;
+        bytes32 previousInscriptionId;
+    }
+
+    // Mapping from Ethereum address to Inscription details
+    mapping(address => Inscription) public inscriptions;
+
+    /**
+     * @dev Record an inscription
+     * @param inscriptionId ID to inscribe the teleburn operation
+     * @param sat Some satoshi-related data (not sure of its exact meaning)
+     * @param satPoint Some satoshi point data (not sure of its exact meaning)
+     * @param teleburnAddress Address where the teleburn will be reflected (likely a Bitcoin address)
+     * @param tokenId The ID of the token to be teleburned (if applicable)
+     */
+    function recordInscription(
+        bytes32 inscriptionId, 
+        uint256 sat, 
+        bytes32 satPoint, 
+        string memory teleburnAddress, 
+        uint256 tokenId
+    ) external {
+        // Record the new inscription
+        inscriptions[msg.sender] = Inscription({
+            inscriptionId: inscriptionId,
+            sat: sat,
+            satPoint: satPoint,
+            teleburnAddress: teleburnAddress,
+            timestamp: block.timestamp,
+            previousInscriptionId: inscriptions[msg.sender].inscriptionId
+        });
+
+        // Emit the teleburn event
+        emit Teleburned(msg.sender, tokenId, inscriptionId, teleburnAddress, block.timestamp);
+    }
+
+    /**
+     * @dev Retrieve the inscription details for a specific address
+     * @param user The address of the user
+     */
+    function getInscription(address user) external view returns (bytes32, uint256, bytes32, string memory, uint256, bytes32) {
+        Inscription memory inscription = inscriptions[user];
+        return (
+            inscription.inscriptionId, 
+            inscription.sat, 
+            inscription.satPoint, 
+            inscription.teleburnAddress, 
+            inscription.timestamp,
+            inscription.previousInscriptionId
+        );
+    }
+}
